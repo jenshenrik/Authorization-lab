@@ -1,11 +1,11 @@
 /** Java 2 Access Control Policy for the JAAS Sample Application **/
 
 /* grant the sample LoginModule permissions */
-grant codebase "file:SampleLM.jar" {
+grant codebase "file:./SampleLM.jar" {
     permission javax.security.auth.AuthPermission "modifyPrincipals";
 };
 
-grant codebase "file:SampleAzn.jar" {
+grant codebase "file:./SampleAzn.jar" {
 
    permission javax.security.auth.AuthPermission "createLoginContext.Sample";
    permission javax.security.auth.AuthPermission "doAsPrivileged";
@@ -15,11 +15,11 @@ grant codebase "file:SampleAzn.jar" {
  ** instantiated by SampleAzn 
  **/
 
-grant	codebase "file:SampleAction.jar",
+grant	codebase "file:./SampleAction.jar",
 	Principal sample.principal.SamplePrincipal "testUser" {
 
    permission java.util.PropertyPermission "java.home", "read";
    permission java.util.PropertyPermission "user.home", "read";
-   /*permission java.io.FilePermission "foo.txt", "read";*/
+   permission java.io.FilePermission "foo.txt", "read";
 };
 
