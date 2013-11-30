@@ -43,6 +43,7 @@ import java.io.File;
 import java.io.IOException;
 import java.security.AccessControlException;
 import java.security.PrivilegedAction;
+import java.util.Collections;
 import java.util.LinkedList;
 
 /**
@@ -97,6 +98,8 @@ public class SampleAction implements PrivilegedAction {
     	} catch (AccessControlException e) {
     		System.out.println("You do not have access to Gold-subscription movies.\n");
     	}
+    	
+    	Collections.sort(availableMovies, null);
     	
     	System.out.println("You have access to the following movies:");
     	for (File f : availableMovies) {
