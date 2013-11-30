@@ -40,7 +40,10 @@
 package sample;
 
 import java.io.File;
+import java.io.IOException;
+import java.security.AccessControlException;
 import java.security.PrivilegedAction;
+import java.util.LinkedList;
 
 /**
  * <p> This is a Sample PrivilegedAction implementation, designed to be
@@ -63,17 +66,49 @@ public class SampleAction implements PrivilegedAction {
      *          to perform the operations listed above.
      */
     public Object run() {
-        System.out.println("\nYour java.home property: "
-                            +System.getProperty("java.home"));
+    	File basic = new File("movies/basic");
+    	File silver = new File("movies/silver");
+    	File gold = new File("movies/gold");
+    	LinkedList<File> availableMovies = new LinkedList<File>();
+    	
+    	try {
+    		File[] basicFiles = basic.listFiles();
+    		for (File f : basicFiles) {
+    			availableMovies.add(f);
+    		}
+    	} catch (AccessControlException e) {
+    		System.out.println("You do not have access to Basic-subscription movies.\n");
+    	}
 
-        System.out.println("\nYour user.home property: "
-                            +System.getProperty("user.home"));
+    	try {
+    		File[] basicFiles = silver.listFiles();
+    		for (File f : basicFiles) {
+    			availableMovies.add(f);
+    		}
+    	} catch (AccessControlException e) {
+    		System.out.println("You do not have access to Silver-subscription movies.\n");
+    	}
 
-        File f = new File("foo.txt");
-        System.out.print("\nfoo.txt does ");
-        if (!f.exists())
-            System.out.print("not ");
-        System.out.println("exist in the current working directory.");
+    	try {
+    		File[] basicFiles = gold.listFiles();
+    		for (File f : basicFiles) {
+    			availableMovies.add(f);
+    		}
+    	} catch (AccessControlException e) {
+    		System.out.println("You do not have access to Gold-subscription movies.\n");
+    	}
+    	
+    	System.out.println("You have access to the following movies:");
+    	for (File f : availableMovies) {
+    		System.out.println(f.getName());
+    	}
+    	
+    	try {
+    		basic.canWrite();
+    		System.out.println("You have admin (writing) rights.\n");
+    	} catch (AccessControlException e) {
+    		System.out.println("You do not have admin rights.\n");
+    	}
         return null;
     }
 }

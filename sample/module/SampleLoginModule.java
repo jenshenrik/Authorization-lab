@@ -45,7 +45,10 @@ import javax.security.auth.*;
 import javax.security.auth.callback.*;
 import javax.security.auth.login.*;
 import javax.security.auth.spi.*;
+
+import sample.RoleEnum;
 import sample.principal.SamplePrincipal;
+import sample.principal.StreamingPrincipal;
 
 /**
  * <p> This sample LoginModule authenticates users with a password.
@@ -248,10 +251,14 @@ public class SampleLoginModule implements LoginModule {
             // to the Subject
 
             // assume the user we authenticated is the SamplePrincipal
-            userPrincipal = new SamplePrincipal(username);
-            if (!subject.getPrincipals().contains(userPrincipal))
-                subject.getPrincipals().add(userPrincipal);
+//            userPrincipal = new SamplePrincipal(username);
+            StreamingPrincipal streamingPrincipal = new StreamingPrincipal(RoleEnum.Admin);
+//            if (!subject.getPrincipals().contains(userPrincipal))
+//                subject.getPrincipals().add(userPrincipal);
 
+            if (!subject.getPrincipals().contains(streamingPrincipal))
+            	subject.getPrincipals().add(streamingPrincipal);
+            
             if (debug) {
                 System.out.println("\t\t[SampleLoginModule] " +
                                 "added SamplePrincipal to Subject");
