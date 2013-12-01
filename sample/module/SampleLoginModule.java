@@ -83,7 +83,8 @@ public class SampleLoginModule implements LoginModule {
     // username and password
     private String username;
     private char[] password;
-
+    private RoleEnum subscription;
+    
     // testUser's SamplePrincipal
     private SamplePrincipal userPrincipal;
 
@@ -118,6 +119,28 @@ public class SampleLoginModule implements LoginModule {
         debug = "true".equalsIgnoreCase((String)options.get("debug"));
     }
 
+    private RoleEnum verifyUser(String username, char[] password) {
+    	String pwd = new String(password);
+    	switch (username) {
+    	case "Alice":
+    		if (pwd.equals("alice")) return RoleEnum.Basic;
+    		break;
+    	case "Bob":
+    		if (pwd.equals("bob")) return RoleEnum.Basic;
+    		break;
+    	case "Carol":
+    		if (pwd.equals("carol")) return RoleEnum.Silver;
+    		break;
+    	case "David":
+    		if (pwd.equals("david")) return RoleEnum.Gold;
+    		break;
+    	case "Elisa":
+    		if (pwd.equals("elisa")) return RoleEnum.Admin;
+    		break;
+    	}
+    	return null;
+    }
+    
     /**
      * Authenticate the user by prompting for a user name and password.
      *
@@ -178,23 +201,9 @@ public class SampleLoginModule implements LoginModule {
         // verify the username/password
         boolean usernameCorrect = false;
         boolean passwordCorrect = false;
-        if (username.equals("testUser"))
-            usernameCorrect = true;
-        if (usernameCorrect &&
-            password.length == 12 &&
-            password[0] == 't' &&
-            password[1] == 'e' &&
-            password[2] == 's' &&
-            password[3] == 't' &&
-            password[4] == 'P' &&
-            password[5] == 'a' &&
-            password[6] == 's' &&
-            password[7] == 's' &&
-            password[8] == 'w' &&
-            password[9] == 'o' &&
-            password[10] == 'r' &&
-            password[11] == 'd') {
-
+        subscription = verifyUser(username, password);
+        if (subscription != null) {
+        	
             // authentication succeeded!!!
             passwordCorrect = true;
             if (debug)
@@ -252,7 +261,7 @@ public class SampleLoginModule implements LoginModule {
 
             // assume the user we authenticated is the SamplePrincipal
 //            userPrincipal = new SamplePrincipal(username);
-            StreamingPrincipal streamingPrincipal = new StreamingPrincipal(RoleEnum.Admin);
+            StreamingPrincipal streamingPrincipal = new StreamingPrincipal(subscription);
 //            if (!subject.getPrincipals().contains(userPrincipal))
 //                subject.getPrincipals().add(userPrincipal);
 
