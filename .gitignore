@@ -1,2 +1,7 @@
 *.class
 *.jar
+*.swp
+
+doc/*.log
+doc/*.aux
+doc/*.pdf

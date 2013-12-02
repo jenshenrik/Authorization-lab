@@ -41,10 +41,15 @@ package sample;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.AccessControlException;
 import java.security.PrivilegedAction;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * <p> This is a Sample PrivilegedAction implementation, designed to be
@@ -111,6 +116,23 @@ public class SampleAction implements PrivilegedAction {
     		System.out.println("You have admin (writing) rights.\n");
     	} catch (AccessControlException e) {
     		System.out.println("You do not have admin rights.\n");
+    	}
+    	
+    	for (File f : availableMovies) {
+	    	try {
+	    		//File f = availableMovies.get(0);
+	    		System.out.println("Opening file " + f.getPath() + "...");
+	    		Path filePath = Paths.get(f.getPath());
+	    		List<String> lines = Files.readAllLines(filePath, Charset.defaultCharset());
+	    		for (String line : lines) {
+	    			System.out.println(line);
+	    		}
+	    		System.out.println();
+	    	} catch (AccessControlException e) {
+	    		System.out.println("You do not have access to read the requested file.\n");
+	    	} catch (IOException e1) {
+	    		System.out.println("I/O Exception.\n");
+	    	}
     	}
         return null;
     }

@@ -18,37 +18,48 @@ grant codebase "file:./SampleAzn.jar" {
 grant codebase "file:./SampleAction.jar",
 	Principal sample.principal.StreamingPrincipal "Basic" {
 	
-	permission java.io.FilePermission "movies/basic", "read";
+	permission java.io.FilePermission "movies/basic",   "read";
+	permission java.io.FilePermission "movies/basic/*", "read";
 };
 
 grant codebase "file:./SampleAction.jar",
 	Principal sample.principal.StreamingPrincipal "Silver" {
 	
-	permission java.io.FilePermission "movies/basic", "read";
-	permission java.io.FilePermission "movies/silver", "read";
+	permission java.io.FilePermission "movies/basic",    "read";
+	permission java.io.FilePermission "movies/basic/*",  "read";
+	permission java.io.FilePermission "movies/silver",   "read";
+	permission java.io.FilePermission "movies/silver/*", "read";
 };
 
 grant codebase "file:./SampleAction.jar",
 	Principal sample.principal.StreamingPrincipal "Gold" {
 	
-	permission java.io.FilePermission "movies", "read";
+	permission java.io.FilePermission "movies/basic/",   "read";
+	permission java.io.FilePermission "movies/basic/*",  "read";
+	permission java.io.FilePermission "movies/silver/",  "read";
+	permission java.io.FilePermission "movies/silver/*", "read";
+	permission java.io.FilePermission "movies/gold/",    "read";
+	permission java.io.FilePermission "movies/gold/*",   "read";
 };
 
 grant codebase "file:./SampleAction.jar",
 	Principal sample.principal.StreamingPrincipal "Admin" {
 	
-	permission java.io.FilePermission "movies/basic", "read";
-	permission java.io.FilePermission "movies/silver", "read";
-	permission java.io.FilePermission "movies/gold", "read";
-	permission java.io.FilePermission "movies/*", "write";
+	/* Reading permissions */
+	permission java.io.FilePermission "movies/basic",    "read";
+	permission java.io.FilePermission "movies/basic/*",  "read";
+	permission java.io.FilePermission "movies/silver",   "read";
+	permission java.io.FilePermission "movies/silver/*", "read";
+	permission java.io.FilePermission "movies/gold",     "read";
+	permission java.io.FilePermission "movies/gold/*",   "read";
+	permission java.io.FilePermission "movies/*",        "read";
+	
+	/* Write permissions */
+	permission java.io.FilePermission "movies/basic",    "write";
+	permission java.io.FilePermission "movies/basic/*",  "write";
+	permission java.io.FilePermission "movies/silver",   "write";
+	permission java.io.FilePermission "movies/silver/*", "write";
+	permission java.io.FilePermission "movies/gold",     "write";
+	permission java.io.FilePermission "movies/gold/*",   "write";
+	permission java.io.FilePermission "movies/*",        "write";
 };
-/*
-grant codebase "file:./SampleAction.jar",
-	Principal sample.principal.SamplePrincipal "testUser" {
-
-   permission java.util.PropertyPermission "java.home", "read";
-   permission java.util.PropertyPermission "user.home", "read";
-   permission java.io.FilePermission "foo.txt", "read";
-   //permission java.io.FilePermission "foo.txt", "write";
-};
-*/
