@@ -119,6 +119,16 @@ public class SampleLoginModule implements LoginModule {
         debug = "true".equalsIgnoreCase((String)options.get("debug"));
     }
 
+    /**
+     * Bsaic function for authorizing users
+     * specified in assignment. Returns the
+     * role of authenticated user, null if failed.
+     * 
+     * @param username String containing the username.
+     * @param password Char-array containing the username.
+     * @return The RoleEnum matching the subscription 
+     * of authenticated user. Null if failed.
+     */
     private RoleEnum verifyUser(String username, char[] password) {
     	String pwd = new String(password);
     	switch (username) {
@@ -258,12 +268,7 @@ public class SampleLoginModule implements LoginModule {
         } else {
             // add a Principal (authenticated identity)
             // to the Subject
-
-            // assume the user we authenticated is the SamplePrincipal
-//            userPrincipal = new SamplePrincipal(username);
             StreamingPrincipal streamingPrincipal = new StreamingPrincipal(subscription);
-//            if (!subject.getPrincipals().contains(userPrincipal))
-//                subject.getPrincipals().add(userPrincipal);
 
             if (!subject.getPrincipals().contains(streamingPrincipal))
             	subject.getPrincipals().add(streamingPrincipal);

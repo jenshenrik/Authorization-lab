@@ -51,32 +51,15 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * <p> This is a Sample PrivilegedAction implementation, designed to be
- * used with the Sample application.
- *
- */
 public class SampleAction implements PrivilegedAction {
 
-    /**
-     * <p> This Sample PrivilegedAction performs the following operations:
-     * <ul>
-     * <li> Access the System property, <i>java.home</i>
-     * <li> Access the System property, <i>user.home</i>
-     * <li> Access the file, <i>foo.txt</i>
-     * </ul>
-     *
-     * @return <code>null</code> in all cases.
-     *
-     * @exception SecurityException if the caller does not have permission
-     *          to perform the operations listed above.
-     */
     public Object run() {
     	File basic = new File("movies/basic");
     	File silver = new File("movies/silver");
     	File gold = new File("movies/gold");
     	LinkedList<File> availableMovies = new LinkedList<File>();
     	
+    	// Attempt to read files in basic subscription
     	try {
     		File[] basicFiles = basic.listFiles();
     		for (File f : basicFiles) {
@@ -86,6 +69,7 @@ public class SampleAction implements PrivilegedAction {
     		System.out.println("You do not have access to Basic-subscription movies.\n");
     	}
 
+    	// Attempt to read files in silver subscription
     	try {
     		File[] basicFiles = silver.listFiles();
     		for (File f : basicFiles) {
@@ -95,6 +79,7 @@ public class SampleAction implements PrivilegedAction {
     		System.out.println("You do not have access to Silver-subscription movies.\n");
     	}
 
+    	// Attempt to read files in gold subscription
     	try {
     		File[] basicFiles = gold.listFiles();
     		for (File f : basicFiles) {
@@ -104,13 +89,16 @@ public class SampleAction implements PrivilegedAction {
     		System.out.println("You do not have access to Gold-subscription movies.\n");
     	}
     	
+    	// Sort readable files by filename
     	Collections.sort(availableMovies, null);
     	
+    	// List readable files
     	System.out.println("You have access to the following movies:");
     	for (File f : availableMovies) {
     		System.out.println(f.getName());
     	}
     	
+    	// Check for write permissions (admin)
     	try {
     		basic.canWrite();
     		System.out.println("You have admin (writing) rights.\n");
@@ -118,9 +106,10 @@ public class SampleAction implements PrivilegedAction {
     		System.out.println("You do not have admin rights.\n");
     	}
     	
+    	// Open each file available and print content
+    	// in order to prove reading rights
     	for (File f : availableMovies) {
 	    	try {
-	    		//File f = availableMovies.get(0);
 	    		System.out.println("Opening file " + f.getPath() + "...");
 	    		Path filePath = Paths.get(f.getPath());
 	    		List<String> lines = Files.readAllLines(filePath, Charset.defaultCharset());

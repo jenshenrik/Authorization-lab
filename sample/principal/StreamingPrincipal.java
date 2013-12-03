@@ -14,7 +14,6 @@ public class StreamingPrincipal implements Principal, java.io.Serializable {
 	
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return subscription;
 	}
 	

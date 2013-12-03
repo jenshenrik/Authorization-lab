@@ -13,17 +13,6 @@
 \fancyfoot[R]{\thepage}
 \fancyfoot[L]{s070145 -- Jens Henrik Skuldbøl}
 
-\newcommand\Q[1]{
-	\leavevmode\par
-	\noindent
-	\emph{Q -- #1}
-	\\
-}
-
-\newcommand\A[1]{
-	A -- #1
-}
-
 \title{Access Control Lab}
 \author{Jens Henrik Skuldbøl, s070145}
 \date{December 4th, 2013}
@@ -40,11 +29,132 @@
 
 \newpage
 
-\section{Task 3}
+\section{Practical information}
 
-\section{Task 4}
+\subsection{Technical notes}
+A very small part of this program uses Java's New I/O
+(\texttt{java.nio}) library, and therefor required Java 7
+to run. It is, however, only the actual reading of files
+that uses this library, so one should be able to run
+the program using Java 6 with few modifications.
 
-\section{Task 5}
+The code that uses \texttt{java.nio} is located in
+\texttt{sample.Sampleaction.java}, lines 111-125.
+
+\subsection{Building and running the program}
+Included in the project are two shell-files, \texttt{build.sh}
+and \texttt{run.sh}. Running either of these two files
+does what their name implies.
+
+These files were created and tested on a system running
+Debian Linux, and I can make no guarantees that they
+will work on other systems.
+
+\subsection{Users}
+The users implemented in this system are the ones listed
+in the assignment. These users are
+\begin{itemize}
+	\item Alice (Basic subscription)
+	\item Bob (Basic subscription)
+	\item Carol (Silver subscription)
+	\item David (Gold subscription)
+	\item Elisa (Admin)
+\end{itemize}
+
+In keeping with realisticly insecure password standards,
+each user's password is her name in lowercase letters.
+
+\section{Design}
+
+\subsection{Filesystem structure}
+The movies in the system is arranged into folders
+named by the subscription name (\texttt{basic},
+\texttt{silver}, and \texttt{gold})
+in a folder named \texttt{movies}. Each of these
+folders contains the files (movies) available
+to that subscription.
+
+\subsection{System functionality}
+As the purpose of this excercise is to demonstrate
+Java's access control functionality, it's functionality
+is rather limited.
+Once the user logs in, the system adds a
+\texttt{StreamingPrincipal} containing
+the name of the users subscription to her
+subject.
+
+The \texttt{SampleAction} run then attempts
+to read each of the directories containing movies,
+adding them to a list of movies available to
+the user if her subscription allows her to 
+read the files.
+
+After gathering available files, the system 
+checks whether the user has writing priviledges
+(making her admin).
+
+Lastly, the program lists the movies available
+(files readable) to the user, and then reads
+them (printing their content).
+
+\section{Implementation}
+
+\subsection{Priviledges}
+The policies specified in the assignment ranks four
+subscriptions/roles in the following order:
+\begin{enumerate}
+	\item Basic
+	\item Silver
+	\item Gold
+	\item Admin
+\end{enumerate}
+where each role includes the permissions of the previous.
+The admin-role stands out by being the only one
+who has writing permissions.
+
+Due to the simple nature of this structure,
+each role has all the needed permissions
+specified in the policy-file.
+
+Another solution would have been to specify
+the unique permissions to a principal for each
+role. Subjects with greater subscriptions/roles
+would then have a principal for their role, and
+for each one beneath it in the hierarchy.
+This would make for a more flexible solution
+allowing for more complex systems.
+This was, however, not needed for a system of
+this level of complexity.
+
+\subsection{User authentication}
+For some reason, the authentication implemented
+in the previous lab did not want to play nice
+with the code in this project.
+As the focus of this lab is authorization
+and not authentication, I've implemented a simple
+method for authentication users, and check
+their subscription.
+
+This solution has usernames and passwords
+hardcoded. When a user enters a correct username
+and password, the method returns the
+\texttt{RoleEnum} corresponding to that
+users subscription.
+
+This role is then saved in a private member in
+the \texttt{SampleLoginModule}, which contains
+the method as well, and is used to create the
+principal in the \texttt{commit} method on
+a successful login.
+
+Had the previous implementation worked,
+the users subscription should have been
+stored in the password file along with
+usernames and passwords.
+This would have been done i a way similar
+to how groups are handled in UNIX systems.
+
+%\section{Task 5}
 
 \newpage
 \appendix
@@ -53,16 +163,76 @@
 
 \subsection{Task 3}
 
+\subsubsection{Roles}
+\lstinputlisting
+[
+	basicstyle=\footnotesize,
+	numbers=left,
+	numberstyle=\tiny,
+	breaklines=true,
+	language=Java
+]
+{../sample/RoleEnum.java}
+
 \subsubsection{Principal}
+\lstinputlisting
+[
+	basicstyle=\footnotesize,
+	numbers=left,
+	numberstyle=\tiny,
+	breaklines=true,
+	language=Java
+]
+{../sample/principal/StreamingPrincipal.java}
 
 \subsubsection{Adding principal}
+\lstinputlisting
+[
+	basicstyle=\footnotesize,
+	numbers=left,
+	numberstyle=\tiny,
+	breaklines=true,
+	language=Java,
+	firstline=265,
+	lastline=290
+]
+{../sample/module/SampleLoginModule.java}
 
 \subsubsection{Action}
+\lstinputlisting
+[
+	basicstyle=\footnotesize,
+	numbers=left,
+	numberstyle=\tiny,
+	breaklines=true,
+	language=Java
+]
+{../sample/SampleAction.java}
 
 \subsection{Task 4}
 
 \subsubsection{Policies}
+\lstinputlisting
+[
+	basicstyle=\footnotesize,
+	numbers=left,
+	numberstyle=\tiny,
+	breaklines=true,
+	language=Java
+]
+{../sampleazn.policy}
 
 \subsubsection{User authentication}
+\lstinputlisting
+[
+	basicstyle=\footnotesize,
+	numbers=left,
+	numberstyle=\tiny,
+	breaklines=true,
+	language=Java,
+	firstline=122,
+	lastline=152
+]
+{../sample/module/SampleLoginModule.java}
 
 \end{document}
